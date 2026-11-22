@@ -3,7 +3,7 @@ import { useEffect, useMemo, useState } from "react";
 import { io } from "socket.io-client";
 import "./App.css";
 import { QRCodeSVG } from "qrcode.react";
-const API = "http://localhost:5000/api";
+const API = import.meta.env.VITE_API_URL || "http://localhost:5000/api";
 import { Html5QrcodeScanner } from "html5-qrcode";
 
 const initialFoods = [
@@ -235,7 +235,11 @@ setTimeout(() => setNotice(""), 4500);
   useEffect(() => {
   if (!user?._id) return;
 
-  const socket = io("http://localhost:5000");
+  const socket = io(
+  import.meta.env.VITE_API_URL
+    ? import.meta.env.VITE_API_URL.replace(/\/api$/, "")
+    : "http://localhost:5000"
+);
 
   socket.on("connect", () => {
     console.log("Socket connected:", socket.id);
